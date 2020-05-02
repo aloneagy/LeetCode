@@ -7,53 +7,32 @@ package algorithm;
  **/
 
 public class quick_sort {
-    public void sort(int left,int right,int[] array) {
-        if (left>=right) return ;//终止条件
-        int start=left;
-        int end=right;
-        int flag=left;//基准为左边的第一个数
-        while(left<right) {
-            while ((left<right)&&(array[right]>=array[flag])) {
-                right--;//从右边搜索
-            }
-            if (array[right]<array[flag]) {//如果遇到右边的值比基准树小，就交换两个的值
-                int tmp=array[right];
-                array[right]=array[flag];
-                array[flag]=tmp;
-                flag=right;
-            }
-            while ((left<right)&&(array[left]<=array[flag])) {
-                left++;//左边搜索
-            }
-            if (array[left]>array[flag]) {//如果左边的比基准树大，就交换
-                int tmp=array[left];
-                array[left]=array[flag];
-                array[flag]=tmp;
-                flag=left;
-            }
-        }
-        sort(start, left-1, array);
-        sort(left+1, end, array);
-    }
-    public static void sort(Comparable[] a,int lo,int hi){
-        if(lo>=hi)return;
-        int lt=lo,i=lo+1,gt=hi;
-        Comparable v=a[lo];
-        while (i<=gt){
-            int temp=a[i].compareTo(v);
-            if (temp<0) exch(a,lt++,i++);
-            else if (temp>0) exch(a,i,gt--);
-            else i++;
-        }
-        sort(a,lo,lt-1);
-        sort(a,gt+1,hi);
-    }
+         public int[] quickSort(int[] arr, int left, int right) {
+         if(left < right) {
+             int p = partition(arr, left, right); //基准值
+             quickSort(arr, left, p - 1);
+             quickSort(arr, p + 1, right);
+         }
+         return arr;
+         }
 
-    private static void exch(Comparable[] a,int i,int j){
-        Comparable t;
-        t=a[i];
-        a[i]=a[j];
-        a[j]=t;
-    }
+         public int partition(int[] arr, int left, int right) {
+             int p = left;           // 根据基准值交换
+             int index = left + 1;
+             for(int i = index; i <= right; i++) {
+                 if(arr[i] < arr[p]) {
+                     swap(arr, index, i);
+                     index++;
+                 }
+             }
+             swap(arr, p, index - 1);
+             return index - 1;
+         }
+
+         public void swap(int[] arr, int t1, int t2){
+             int temp = arr[t1];  //交换数组元素
+             arr[t1] = arr[t2];
+             arr[t2] = temp;
+         }
 
 }
