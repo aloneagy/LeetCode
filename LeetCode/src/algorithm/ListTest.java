@@ -34,6 +34,16 @@
 //    //用环形链表实现Queue，环形链表没有任何节点连接为空，只要链表非空则last.next的值为first,只能用一个Node的实例变量（list）
 //
 //    //反转链表
+//public ListNode reverseList(ListNode head) {
+//        ListNode cur = head, pre = null, next = null;
+//        while(cur != null){
+//        next = cur.next;
+//        cur.next = pre;
+//        pre = cur;
+//        cur = next;
+//        }
+//        return pre;
+//        }
 //
 //    //为Stack添加一个peek（）方法，返回栈中最近添加的元素
 //

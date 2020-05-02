@@ -17,4 +17,22 @@ package Leetcode_Easy;
  **/
 
 public class firstUniqChar {
+    public char firstUniqChar(String s) {
+        char[] chars = s.toCharArray();
+        if(chars.length==0){
+            return ' ';
+        }
+        if(chars.length==1) return chars[0];
+        for(int i=0;i<chars.length;i++){
+            if(s.indexOf(chars[i])==s.lastIndexOf(chars[i])){
+                return chars[i];
+            }
+        }
+        return ' ';
+    }
+
+    public static void main(String[] args) {
+        firstUniqChar a=new firstUniqChar();
+        a.firstUniqChar("aa");
+    }
 }

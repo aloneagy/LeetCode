@@ -1,8 +1,6 @@
 package Leetcode_Easy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author ynz
@@ -31,13 +29,23 @@ import java.util.List;
 
 public class minimumAbsDifference {
     public List<List<Integer>> minimumAbsDifference(int[] arr) {
-        if(arr.length==0 ||arr.length==1) return null;
-        HashMap<Integer, ArrayList<Integer>> array=new HashMap<>();
-        for(int i=0;i<arr.length;i++){
-            for(int j=i+1;j<arr.length;j++){
-                Math.abs(arr[i]-arr[j]);
+        Arrays.sort(arr);
+        ArrayList<List<Integer>> b=new ArrayList<>();
+        int min=Integer.MAX_VALUE;
+        for (int i = 1; i <arr.length ; i++) {
+            if((arr[i]-arr[i-1])<min){
+                min=arr[i]-arr[i-1];
             }
         }
-        return null;
+        for (int i = 1; i <arr.length ; i++) {
+            List<Integer> subRes=new ArrayList<>();
+            if((arr[i]-arr[i-1])==min){
+                subRes.add(arr[i-1]);
+                subRes.add(arr[i]);
+                b.add(subRes);
+            }
+        }
+        return b;
+
     }
 }
