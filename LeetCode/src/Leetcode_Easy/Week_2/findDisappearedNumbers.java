@@ -1,8 +1,6 @@
 package Leetcode_Easy.Week_2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author ynz
@@ -25,16 +23,21 @@ import java.util.List;
 
 public class findDisappearedNumbers {
     public List<Integer> findDisappearedNumbers(int[] nums) {
-        if(nums.length==0) return null;
-        List<Integer> a=new ArrayList<>();
-        Arrays.sort(nums);
-        for (int i = 1; i <nums[nums.length-1] ; i++) {
-            if(i!=nums[i]){
-                a.add(i);
-                i++;
+        HashSet<Integer> a=new HashSet<>();
+        for (int i = 1; i <=nums.length ; i++) {
+            a.add(i);
+        }
+        for (int i = 0; i <nums.length ; i++) {
+            if(a.contains(nums[i])){
+                a.remove(nums[i]);
             }
         }
-        return a;
+        ArrayList<Integer> aa=new ArrayList<>();
+        Object[] objects = a.toArray();
+        for (int i = 0; i <objects.length ; i++) {
+            aa.add((int) objects[i]);
+        }
+        return aa;
     }
 
     public static void main(String[] args) {

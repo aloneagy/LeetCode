@@ -11,6 +11,7 @@ import java.util.Arrays;
 public class SortPractice {
     //假设进来的是递增序列
     //没找到返回-1；
+    //tested
     public int binarySearch(int[] arr,int left,int right,int target) {
         int mid = (left + right) / 2;
         if (right >= left) {
@@ -26,29 +27,41 @@ public class SortPractice {
         }
     }
 
-    
-    public void quickSort(int[] a,int left,int right){
-        if(left>right){
-            return;
-        }
-        int privotkey=a[left];
-        int i=left;
-        int j=right;
-        while (i<j){
-            while (a[j]>=privotkey&&i<j){
-                j--;
+
+    public int[] quickSort(int[] arr,int low,int high) {
+        int p,i,j,temp;
+        if(low<high) {
+            //p就是基准数,这里就是每个数组的第一个
+            p = arr[low];
+            i = low;
+            j = high;
+            while (i < j) {
+                //右边当发现小于p的值时停止循环
+                while (arr[j] >= p && i < j) {
+                    j--;
+                }
+
+                //这里一定是右边开始，上下这两个循环不能调换（下面有解析，可以先想想）
+
+                //左边当发现大于p的值时停止循环
+                while (arr[i] <= p && i < j) {
+                    i++;
+                }
+
+                temp = arr[j];
+                arr[j] = arr[i];
+                arr[i] = temp;
             }
-            a[i]=a[j];
-            while (a[i]<=privotkey&&i<j){
-                i++;
-            }
-            a[j]=a[i];
+            arr[low] = arr[i];//这里的arr[i]一定是停小于p的，经过i、j交换后i处的值一定是小于p的(j先走)
+            arr[i] = p;
+            quickSort(arr, low, j - 1);  //对左边快排
+            quickSort(arr, j + 1, high); //对右边快排
         }
-        a[i]=privotkey;
-        quickSort(a,left,i-1);
-        quickSort(a,i+1,right);
+         return arr;
+
     }
-    public void bubbleSort(int arr[],int n){//n为长度
+    //tested
+    public int[] bubbleSort(int arr[],int n){//n为长度
         int i,j,k;
         for(i=0;i<n-1;i++){
             for(j=0;j<n-1-i;j++){
@@ -59,8 +72,10 @@ public class SortPractice {
                 }
             }
         }
+        return arr;
     }
-    public void selectSort(int[] arr,int n){
+    //tested
+    public int[] selectSort(int[] arr,int n){
         int i,j,min,k;
         for(i=0;i<n-1;i++){
             min=i;//设定第一个数为最小，然后遍历
@@ -75,19 +90,20 @@ public class SortPractice {
                 arr[i]=k;
             }
         }
+        return arr;
     }
-
-    public void insertSort(int arr[],int n){
-        int i,j,tem;
-        for(i=1;i<n;i++){
-            if(arr[i]<arr[i-1]){
-                tem=arr[i];
-                for(j=i;arr[j-1]>tem;j++){
-                    arr[j]=arr[j-1];
-                }
-                arr[j]=tem;
+    public  int[] insertSort(int[] a) {
+        int i, j, insertNote;// 要插入的数据
+        for (i = 1; i < a.length; i++) {// 从数组的第二个元素开始循环将数组中的元素插入
+            insertNote = a[i];// 设置数组中的第2个元素为第一次循环要插入的数据
+            j = i - 1;
+            while (j >= 0 && insertNote < a[j]) {
+                a[j + 1] = a[j];// 如果要插入的元素小于第j个元素,就将第j个元素向后移动
+                j--;
             }
+            a[j + 1] = insertNote;// 直到要插入的元素不小于第j个元素,将insertNote插入到数组中
         }
+        return a;
     }
 
     //归并排序
@@ -118,7 +134,7 @@ public class SortPractice {
         }
     }
 
-    public static void mergeSort(int[] a, int low, int high) {
+    public int[]  mergeSort(int[] a, int low, int high) {
         int mid = (low + high) / 2;
         if (low < high) {
             // 左边
@@ -127,66 +143,62 @@ public class SortPractice {
             mergeSort(a, mid + 1, high);
             // 左右归并
             merge(a, low, mid, high);
-            System.out.println(Arrays.toString(a));
         }
+        return a;
     }
 
-
-
-
-
-
-    //堆排序
-    private static void heapSort(int[] arr) {
-        // 将待排序的序列构建成一个大顶堆
-        for (int i = arr.length / 2; i >= 0; i--){
-            heapAdjust(arr, i, arr.length);
+    public static void sort(int []arr){
+        //1.构建大顶堆
+        for(int i=arr.length/2-1;i>=0;i--){
+            //从第一个非叶子结点从下至上，从右至左调整结构
+            adjustHeap(arr,i,arr.length);
+        }
+        //2.调整堆结构+交换堆顶元素与末尾元素
+        for(int j=arr.length-1;j>0;j--){
+            swap(arr,0,j);//将堆顶元素与末尾元素进行交换
+            adjustHeap(arr,0,j);//重新对堆进行调整
         }
 
-        // 逐步将每个最大值的根节点与末尾元素交换，并且再调整二叉树，使其成为大顶堆
-        for (int i = arr.length - 1; i > 0; i--) {
-            swap(arr, 0, i); // 将堆顶记录和当前未经排序子序列的最后一个记录交换
-            heapAdjust(arr, 0, i); // 交换之后，需要重新检查堆是否符合大顶堆，不符合则要调整
-        }
     }
 
     /**
-     * 构建堆的过程
-     * @param arr 需要排序的数组
-     * @param i 需要构建堆的根节点的序号
-     * @param n 数组的长度
+     * 调整大顶堆（仅是调整过程，建立在大顶堆已构建的基础上）
      */
-    private static void heapAdjust(int[] arr, int i, int n) {
-        int child;
-        int father;
-        for (father = arr[i]; leftChild(i) < n; i = child) {
-            child = leftChild(i);
-
-            // 如果左子树小于右子树，则需要比较右子树和父节点
-            if (child != n - 1 && arr[child] < arr[child + 1]) {
-                child++; // 序号增1，指向右子树
+    public static void adjustHeap(int []arr,int i,int length){
+        int temp = arr[i];//先取出当前元素i
+        for(int k=i*2+1;k<length;k=k*2+1){//从i结点的左子结点开始，也就是2i+1处开始
+            if(k+1<length && arr[k]<arr[k+1]){//如果左子结点小于右子结点，k指向右子结点
+                k++;
             }
-
-            // 如果父节点小于孩子结点，则需要交换
-            if (father < arr[child]) {
-                arr[i] = arr[child];
-            } else {
-                break; // 大顶堆结构未被破坏，不需要调整
+            if(arr[k] >temp){//如果子节点大于父节点，将子节点值赋给父节点（不用进行交换）
+                arr[i] = arr[k];
+                i = k;
+            }else{
+                break;
             }
         }
-        arr[i] = father;
+        arr[i] = temp;//将temp值放到最终的位置
     }
 
-    // 获取到左孩子结点
-    private static int leftChild(int i) {
-        return 2 * i + 1;
+    public static void swap(int []arr,int a ,int b){
+        int temp=arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
     }
 
-    // 交换元素位置
-    private static void swap(int[] arr, int index1, int index2) {
-        int tmp = arr[index1];
-        arr[index1] = arr[index2];
-        arr[index2] = tmp;
+
+    public static void main(String[] args) {
+        SortPractice a=new SortPractice();
+        int []arr = {3,1,4,2,8,5,9,7,6};
+        sort(arr);
+        System.out.println(Arrays.toString(arr));
+        int[] aa=new int[]{4,3,5,6,7,9};
+//        int[] ints = a.insertSort(aa);
+//        System.out.println(Arrays.toString(ints));
+//        int[] ints1 = a.mergeSort(aa, 0, aa.length - 1);
+//        System.out.println(Arrays.toString(ints1));
+//        int[] ints2 = a.quickSort(aa, 0, aa.length - 1);
+//        System.out.println(Arrays.toString(aa));
     }
 
 
